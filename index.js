@@ -28,7 +28,7 @@ bot.on('messageUpdate', async (old, current) => {
 
   if (!oldUrl && currentUrl && currentUrl.includes('themoviedb.org/movie')) {
     const title = _.get(current, 'embeds[0].title')
-    current.reply(`say, you wanted to download ${title}. is that correct?`)
+    current.reply(`I'm Leo Getz, and whatever you want, Leo gets. Leo will be getting ${title}, you stupid fuck.`)
 
     const gist = await gistClient.getOneById(GIST_ID)
 
@@ -52,6 +52,5 @@ bot.on('messageUpdate', async (old, current) => {
     }
 
     const newGist = await gistClient.update(GIST_ID, request)
-
   }
 })
