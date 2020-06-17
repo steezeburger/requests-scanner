@@ -1,0 +1,15 @@
+{
+  "name": "requests-scanner",
+  "version": "0.0.1",
+  "description": "scans requests and outputs to a gist",
+  "main": "index.js",
+  "repository": "git@github.com:steezeburger/requests-scanner.git",
+  "author": "Jesse Snyder <jessetsnyder@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
+    "lodash": "^4.17.15"
+  }
+}
