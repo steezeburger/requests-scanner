@@ -1,9 +1,15 @@
 ## roadmap
 
-- [ ] write to github gist
+- [x] write to github gist
+- [x] dont submit existing requests
+- [ ] better config abilities
 
-- [ ] restrict bot to 1 channel
-- [ ] run bot from remote server
-- [ ] debugger
-- [ ] tests
-- [ ] write functionally
+- [ ] refactor to be functional
+- [ ] test
+
+- [ ] run bot on remote server
+- [ ] .vscode debugger config
+
+#### feature ideas
+- [ ] expose command to search list
+- [ ] expose hook to call for notifying of d/l completion

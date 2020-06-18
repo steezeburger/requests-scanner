@@ -28,29 +28,34 @@ bot.on('messageUpdate', async (old, current) => {
 
   if (!oldUrl && currentUrl && currentUrl.includes('themoviedb.org/movie')) {
     const title = _.get(current, 'embeds[0].title')
-    current.reply(`I'm Leo Getz, and whatever you want, Leo gets. Leo will be getting ${title}, you stupid fuck.`)
 
     const gist = await gistClient.getOneById(GIST_ID)
+
+    const oldContent = gist.files[GIST_FILENAME].content
+    const movieList = JSON.parse(oldContent)
+
+    const existingRequest = _.find(
+      movieList,
+      (movie) => movie.url === currentUrl,
+    )
+    if (existingRequest) {
+      return current.reply(`${title} has already been requested. Sorry.`)
+    }
 
     const datum = {
       title: title,
       url: currentUrl,
     }
-
-    const oldContent = gist.files[GIST_FILENAME].content
-
-    const movieList = JSON.parse(oldContent)
-
     const updatedMovieList = movieList.concat([datum])
-
-    const request = {
+    const gistUpdateData = {
       files: {
         [GIST_FILENAME]: {
           content: JSON.stringify(updatedMovieList),
         },
       },
     }
+    const newGist = await gistClient.update(GIST_ID, gistUpdateData)
 
-    const newGist = await gistClient.update(GIST_ID, request)
+    return current.reply(`I'm Leo Getz, and whatever you want, Leo gets. Leo will be getting ${title} for you today.`)
   }
 })
