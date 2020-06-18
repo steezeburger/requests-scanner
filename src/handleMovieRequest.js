@@ -13,6 +13,16 @@ const wasUpdatedWithInfo = (old, current) => {
   return !oldUrl && url && url.includes('themoviedb.org/movie')
 }
 
+const isExistingRequest = (requests, url) => _.find(
+  requests,
+  (movie) => movie.url === url,
+)
+
+const isDeniedRequest = (denyList, url) => _.find(
+  denyList,
+  (movie) => movie.url === url,
+)
+
 /**
  * Updates secret gist with movie information
  */
@@ -26,13 +36,17 @@ module.exports =  async (old, current) => {
   const year = _.get(current, YEAR_PATH)
 
   const data = await getData(gistClient)
-  const { requests } =  data;
-  const existingRequest = _.find(
-    requests,
-    (movie) => movie.url === url,
-    )
-  if (existingRequest) {
+  const { requests, denyList } =  data;
+
+  if (isExistingRequest(requests, url)) {
     return current.reply(`${title} has already been requested. Sorry.`)
+  }
+
+  if (isDeniedRequest(denyList, url)) {
+    return current.reply(`
+      Big Rick says NO THANKS. BIG RICK DENIES ${title}.
+      Maybe ask Big Rick to stop denying your freedoms.
+    `)
   }
 
   const request = {
