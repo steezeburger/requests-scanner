@@ -2,12 +2,11 @@
 
 - [x] write to github gist
 - [x] dont submit existing requests
+- [ ] run bot on remote server
+- [ ] commands abstraction
 - [ ] better config abilities
-
 - [ ] refactor to be functional
 - [ ] test
-
-- [ ] run bot on remote server
 - [ ] .vscode debugger config
 
 #### feature ideas
