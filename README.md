@@ -11,6 +11,6 @@
 - [ ] .vscode debugger config
 
 #### feature ideas
-- [ ] deny list
+- [x] deny list
 - [ ] expose command to search list
 - [ ] expose hook to call for notifying of d/l completion
