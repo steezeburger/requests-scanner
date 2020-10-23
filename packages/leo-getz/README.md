@@ -6,8 +6,12 @@ Setup instructions:
 
     `git checkout feature/django`
 
-* copy config.env to .env and get the following values from a coworker:
+* copy env.sample to .env and get the following values from a coworker:
     * DJANGO_SECRET_KEY
+    * GIST_FILENAME
+    * GIST_TOKEN
+    * GIST_ID
+    * BOT_TOKEN
 
 * open terminal and `cd` to `/packages/leo-getz`
 
