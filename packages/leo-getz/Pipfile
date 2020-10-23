@@ -17,6 +17,7 @@ pytest-xdist = "*"
 django = "*"
 django-extensions = "*"
 psycopg2-binary = "*"
+"discord.py" = "*"
 
 [requires]
 python_version = "3.6"
