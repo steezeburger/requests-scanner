@@ -37,6 +37,6 @@ Setup instructions:
 
 * run the web server
 
-    `docker-compose up web`
+    `docker-compose up bot`
 
   you can now access the admin page at `0.0.0.0/8053` and login with `admin` and `password`
