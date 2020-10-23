@@ -1,0 +1,21 @@
+#! /bin/bash
+
+# make sure postgres container is stopped
+docker-compose stop postgres
+
+# deletes postgres docker container
+docker-compose rm -f postgres
+
+# deletes postgres volume
+docker volume rm leo_getz_postgres
+
+# recreates named volume
+docker volume create --name=leo_getz_postgres
+
+docker-compose up -d postgres
+
+# run migrations
+docker-compose run --rm -w /code/app bot /code/app/manage.py migrate
+
+# load data from fixture
+docker-compose run --rm -w /code/app bot /code/app/manage.py loaddata initial_dev_data.json

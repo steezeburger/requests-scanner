@@ -23,13 +23,6 @@
 {
     "model": "contenttypes.contenttype",
     "fields": {
-        "app_label": "auth",
-        "model": "user"
-    }
-},
-{
-    "model": "contenttypes.contenttype",
-    "fields": {
         "app_label": "contenttypes",
         "model": "contenttype"
     }
@@ -39,6 +32,13 @@
     "fields": {
         "app_label": "sessions",
         "model": "session"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "core",
+        "model": "user"
     }
 },
 {
@@ -176,50 +176,6 @@
 {
     "model": "auth.permission",
     "fields": {
-        "name": "Can add user",
-        "content_type": [
-            "auth",
-            "user"
-        ],
-        "codename": "add_user"
-    }
-},
-{
-    "model": "auth.permission",
-    "fields": {
-        "name": "Can change user",
-        "content_type": [
-            "auth",
-            "user"
-        ],
-        "codename": "change_user"
-    }
-},
-{
-    "model": "auth.permission",
-    "fields": {
-        "name": "Can delete user",
-        "content_type": [
-            "auth",
-            "user"
-        ],
-        "codename": "delete_user"
-    }
-},
-{
-    "model": "auth.permission",
-    "fields": {
-        "name": "Can view user",
-        "content_type": [
-            "auth",
-            "user"
-        ],
-        "codename": "view_user"
-    }
-},
-{
-    "model": "auth.permission",
-    "fields": {
         "name": "Can add content type",
         "content_type": [
             "contenttypes",
@@ -306,18 +262,17 @@
     }
 },
 {
-    "model": "auth.user",
+    "model": "core.user",
     "fields": {
-        "password": "pbkdf2_sha256$216000$nLtpSbW2ZpnV$eIJbRwGAWIooE/JOV9mxeUt+gpiDOxshptYARc8MabA=",
-        "last_login": "2020-10-23T03:01:17.159Z",
+        "password": "pbkdf2_sha256$216000$hpZUYPdxvhAw$dUPGqi7SsbQjBODYuXGUBTE8QKC/gEGZtjQGHv+a2d0=",
+        "last_login": "2020-10-23T04:42:17.495Z",
         "is_superuser": true,
-        "username": "admin",
-        "first_name": "",
-        "last_name": "",
-        "email": "jessetsnyder@gmail.com",
-        "is_staff": true,
+        "created_at": "2020-10-23T04:42:13.429Z",
+        "modified_at": "2020-10-23T04:42:13.429Z",
+        "deleted_at": null,
         "is_active": true,
-        "date_joined": "2020-10-23T03:00:41.695Z",
+        "nickname": "admin",
+        "is_staff": true,
         "groups": [],
         "user_permissions": []
     }

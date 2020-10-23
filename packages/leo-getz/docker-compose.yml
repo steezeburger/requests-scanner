@@ -22,6 +22,9 @@ services:
     environment:
       - POSTGRES_HOST=postgres
     command:
+      - '/code/bin/wait-for-it'
+      - 'postgres:5432'
+      - '--'
       - 'python'
       - '/code/app/manage.py'
       - 'runserver'

@@ -29,7 +29,7 @@ Setup instructions:
 
 * load initial admin user into database
 
-    `./bin/dcp-django-admin loaddata admin_user.json`
+    `./bin/dcp-django-admin loaddata initial_dev_data.json`
 
 * run all unit tests vis shell script
 
@@ -39,4 +39,4 @@ Setup instructions:
 
     `docker-compose up web`
 
-  you can now access the admin page at `0.0.0.0/8053` and login with `admin` and `bananaFactory1!`
+  you can now access the admin page at `0.0.0.0/8053` and login with `admin` and `password`
