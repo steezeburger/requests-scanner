@@ -1,0 +1,5 @@
+#! /bin/bash
+
+# proxy to execute `manage.py` (django-admin) commands in bot container
+
+docker-compose run --rm -w /code/app bot /code/app/manage.py "$@"
