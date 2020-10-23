@@ -6,7 +6,7 @@ Setup instructions:
 
     `git checkout feature/django`
 
-* copy env.sample to .env and get the following values from a coworker:
+* copy env.sample to .env and get the following values from a buddy:
     * DJANGO_SECRET_KEY
     * GIST_FILENAME
     * GIST_TOKEN
