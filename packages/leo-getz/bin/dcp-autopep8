@@ -1,0 +1,3 @@
+#! /bin/bash
+
+docker-compose run --rm bot sh -c "autopep8 --in-place --aggressive **/*.py"

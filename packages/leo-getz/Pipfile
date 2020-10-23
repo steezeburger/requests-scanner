@@ -4,9 +4,18 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+autopep8 = "*"
+factory-boy = "*"
+flake8 = "*"
+pylint = "*"
+pylint-django = "*"
+pytest-cov = "*"
+pytest-django = "*"
+pytest-xdist = "*"
 
 [packages]
 django = "*"
+django-extensions = "*"
 psycopg2-binary = "*"
 
 [requires]

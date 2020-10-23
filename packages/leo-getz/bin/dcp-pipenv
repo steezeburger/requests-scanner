@@ -1,0 +1,5 @@
+#! /bin/bash
+
+# proxy to run pipenv commands in web container.
+
+docker-compose run --rm bot sh -c "pipenv $@"

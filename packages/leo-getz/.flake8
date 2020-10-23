@@ -1,0 +1,15 @@
+[flake8]
+exclude =
+    app/app/test_settings.py
+
+ignore =
+    # line too long
+    E501
+    # line break after operator
+    W504
+
+per-file-ignores =
+    # imported but unused
+    __init__.py: F401
+    # assigned but never used
+    **/test/*: F841
