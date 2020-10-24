@@ -15,16 +15,22 @@ class CreateMovieRequestService(Service):
 
     movie_url = forms.URLField()
 
-    nickname = forms.CharField()
+    discord_username = forms.CharField(required=False)
+
+    discord_id = forms.CharField(required=False)
 
     def process(self) -> 'MovieRequest':
-        nickname = self.cleaned_data.pop('nickname')
+        form = self.cleaned_data
 
-        user = UserRepository.get_or_create(nickname=nickname)
+        user_details = {
+            'discord_id': form.pop('discord_id'),
+            'discord_username': form.pop('discord_username'),
+        }
+        user = UserRepository.get_or_create(data=user_details)
 
-        self.cleaned_data['created_by'] = user
+        form['created_by'] = user
 
-        movie_request = MovieRequestRepository.create(self.cleaned_data)
+        movie_request = MovieRequestRepository.create(form)
         return movie_request
 
     def post_process(self):
