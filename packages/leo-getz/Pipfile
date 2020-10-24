@@ -19,6 +19,7 @@ django-extensions = "*"
 psycopg2-binary = "*"
 "discord.py" = "*"
 django-pgcrypto-fields = "*"
+django-service-objects = "*"
 
 [requires]
 python_version = "3.6"

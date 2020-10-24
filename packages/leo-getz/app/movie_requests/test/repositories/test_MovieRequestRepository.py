@@ -12,7 +12,7 @@ class TestMovieRequestRepository(TestCase):
     def test_should_create_movie_request(self):
         details = {
             'movie_title': 'The Title of the Movie',
-            'movie_url': 'www.someurl.com',
+            'movie_url': 'http://www.someurl.com',
             'fulfilled': False,
             'created_by': self.user,
         }
