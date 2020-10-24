@@ -1,0 +1,41 @@
+from common.repositories.base_repository import BaseRepository
+from movie_requests.models.movie_request import MovieRequest
+
+
+class MovieRequestRepository(BaseRepository):
+    model = MovieRequest
+
+    @classmethod
+    def get_by_filter(cls, filter_input: dict = None):
+        if filter_input:
+            movie_requests = cls.get_queryset().filter(**filter_input)
+        else:
+            movie_requests = cls.get_queryset().all()
+        return movie_requests
+
+    @classmethod
+    def create(cls, data: dict) -> 'MovieRequest':
+        note = cls.model.objects.create(**data)
+        return note
+
+    @classmethod
+    def delete(cls, *, pk=None, obj: 'MovieRequest' = None) -> 'MovieRequest':
+        movie_request = obj or cls.get(pk=pk)
+        movie_request.delete()
+        return movie_request
+
+    @classmethod
+    def update(cls, *, pk=None, obj: 'MovieRequest' = None, data: dict) -> 'MovieRequest':
+        movie_request = obj or cls.get(pk=pk)
+
+        if data.get('movie_title'):
+            movie_request.movie_title = data['movie_title']
+
+        if data.get('movie_url'):
+            movie_request.movie_url = data['movie_url']
+
+        if data.get('fulfilled'):
+            movie_request.fulfilled = data['fulfilled']
+
+        movie_request.save()
+        return movie_request

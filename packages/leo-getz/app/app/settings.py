@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'pgcrypto',
+
     'core',
     'movie_requests',
 ]
@@ -129,3 +131,6 @@ STATIC_URL = '/static/'
 
 # Discord
 DISCORD_TOKEN = os.environ['DISCORD_TOKEN']
+
+# pgcrypto
+PGCRYPTO_KEY = os.environ['PGCRYPTO_KEY']

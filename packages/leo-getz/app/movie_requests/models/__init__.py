@@ -1,0 +1,1 @@
+from movie_requests.models.movie_request import MovieRequest
