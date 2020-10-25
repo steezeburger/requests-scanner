@@ -4,6 +4,7 @@ ENV PYTHONUNBUFFERED 1
 # install pipenv and compilation dependencies
 RUN apt-get update && apt-get install -y gcc
 RUN pip install --upgrade pip pipenv
+RUN pip install idna_ssl
 
 # install python dependencies
 RUN mkdir /code
