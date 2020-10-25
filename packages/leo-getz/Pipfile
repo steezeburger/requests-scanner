@@ -20,6 +20,7 @@ psycopg2-binary = "*"
 "discord.py" = "*"
 django-pgcrypto-fields = "*"
 django-service-objects = "*"
+certifi = "*"
 
 [requires]
 python_version = "3.6"
