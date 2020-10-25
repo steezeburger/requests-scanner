@@ -1,3 +1,5 @@
+from asgiref.sync import sync_to_async
+
 from common.repositories.base_repository import BaseRepository
 from movie_requests.models.movie_request import MovieRequest
 
@@ -14,6 +16,7 @@ class MovieRequestRepository(BaseRepository):
         return movie_requests
 
     @classmethod
+    @sync_to_async
     def create(cls, data: dict) -> 'MovieRequest':
         note = cls.model.objects.create(**data)
         return note

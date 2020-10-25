@@ -33,4 +33,4 @@ class MovieRequest(CreatedByMixin,
     class Meta:
         db_table = 'movie_requests'
         default_permissions = ()
-        ordering = (id,)
+        ordering = ('id',)
