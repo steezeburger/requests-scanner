@@ -1,3 +1,4 @@
+from asgiref.sync import sync_to_async
 from django import forms
 from service_objects.services import Service
 
@@ -19,14 +20,15 @@ class CreateMovieRequestService(Service):
 
     discord_id = forms.CharField(required=False)
 
-    def process(self) -> 'MovieRequest':
+    @sync_to_async
+    async def process(self) -> 'MovieRequest':
         form = self.cleaned_data
 
         user_details = {
             'discord_id': form.pop('discord_id'),
             'discord_username': form.pop('discord_username'),
         }
-        user = UserRepository.get_or_create(data=user_details)
+        user = await UserRepository.get_or_create(data=user_details)
 
         form['created_by'] = user
 

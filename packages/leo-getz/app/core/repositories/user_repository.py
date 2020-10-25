@@ -1,3 +1,4 @@
+from asgiref.sync import sync_to_async
 from django.core.exceptions import ValidationError
 
 from common.repositories.base_repository import BaseRepository
@@ -13,6 +14,7 @@ class UserRepository(BaseRepository):
         return user
 
     @classmethod
+    @sync_to_async
     def get_or_create(cls, *, data: dict):
         if 'discord_id' not in data or 'discord_username' not in data:
             raise ValidationError("Input must include `discord_id` or `discord_username`")

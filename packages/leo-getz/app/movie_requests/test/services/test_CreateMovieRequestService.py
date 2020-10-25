@@ -1,10 +1,11 @@
+from asgiref.sync import sync_to_async
 from django.test import TestCase
 
 from core.test.helpers import UserFactory
 from movie_requests.services import CreateMovieRequestService
 
 
-class TestMovieRequestRepository(TestCase):
+class TestCreateMovieRequestService(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = UserFactory(
@@ -12,7 +13,8 @@ class TestMovieRequestRepository(TestCase):
             discord_id='asdf',
             discord_username='pumpkin')
 
-    def test_should_create_movie_request(self):
+    @sync_to_async
+    async def test_should_create_movie_request(self):
         form = {
             'movie_title': 'The Title of the Movie',
             'movie_url': 'http://www.someurl.com',
@@ -20,7 +22,7 @@ class TestMovieRequestRepository(TestCase):
             'discord_id': self.user.discord_id,
         }
 
-        movie_request = CreateMovieRequestService.execute(form)
+        movie_request = await CreateMovieRequestService.execute(form)
 
         self.assertEqual(form['movie_title'], movie_request.movie_title)
         self.assertEqual(form['movie_url'], movie_request.movie_url)
@@ -29,7 +31,8 @@ class TestMovieRequestRepository(TestCase):
         # not fulfilled by default
         self.assertEqual(False, movie_request.fulfilled)
 
-    def test_should_create_movie_request_and_user(self):
+    @sync_to_async
+    async def test_should_create_movie_request_and_user(self):
         form = {
             'movie_title': 'The Title of the Movie',
             'movie_url': 'http://www.someurl.com',
@@ -37,7 +40,7 @@ class TestMovieRequestRepository(TestCase):
             'discord_id': 'ABCD-1234',
         }
 
-        movie_request = CreateMovieRequestService.execute(form)
+        movie_request = await CreateMovieRequestService.execute(form)
 
         self.assertEqual(form['movie_title'], movie_request.movie_title)
         self.assertEqual(form['movie_url'], movie_request.movie_url)
