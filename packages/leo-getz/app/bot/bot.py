@@ -5,9 +5,7 @@ from discord.ext.commands import Context
 from core.repositories.user_repository import UserRepository
 from movie_requests.repositories.movie_request_repository import MovieRequestRepository
 
-# FIXME - update when ready
-# bot = commands.Bot(command_prefix='!')
-bot = commands.Bot(command_prefix='=')
+bot = commands.Bot(command_prefix='!')
 
 
 async def get_or_create_user_from_author(author):
