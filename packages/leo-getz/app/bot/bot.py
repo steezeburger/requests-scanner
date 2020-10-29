@@ -22,6 +22,22 @@ async def get_or_create_user_from_author(author):
 
 
 @bot.command(pass_sontext=True)
+async def moviestats(ctx: Context, *args):
+    movie_title = ' '.join(args)
+    movie_requests = await sync_to_async(list)(MovieRequestRepository.model.objects.filter(
+        movie_title__iexact=movie_title).all())
+
+    cnt = len(movie_requests)
+
+    if cnt > 0:
+        await ctx.message.channel.send(
+            f"{movie_requests[0].movie_title} has been requested {str(cnt)} times.")
+    else:
+        await ctx.message.channel.send(
+            f"{movie_title} has not been requested.")
+
+
+@bot.command(pass_sontext=True)
 async def stats(ctx: Context):
     author = ctx.message.author
 
