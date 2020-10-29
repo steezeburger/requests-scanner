@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'pgcrypto',
+    'django_extensions',
 
     'core',
     'movie_requests',

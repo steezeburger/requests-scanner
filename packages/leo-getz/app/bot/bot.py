@@ -1,7 +1,14 @@
+import os
+from functools import reduce
+
 from asgiref.sync import sync_to_async
+from discord import File
 from discord.ext import commands
 from discord.ext.commands import Context
+from django.db.models import Count
+from matplotlib import pyplot
 
+from bot.helpers import partition
 from core.repositories.user_repository import UserRepository
 from movie_requests.repositories.movie_request_repository import MovieRequestRepository
 
@@ -52,6 +59,50 @@ async def stats(ctx: Context):
 
     await ctx.message.channel.send(
         f"{author.display_name} has requested {str(cnt)} movies.")
+
+
+@bot.command(pass_context=True,
+             brief='Pie!',
+             help='A pie chart showing request count percentages.')
+async def statspie(ctx: Context):
+    def generate_size(count, total):
+        percentage = count / total * 100
+        return round(percentage, 2)
+
+    request_counts = await sync_to_async(list)(
+        UserRepository.model.objects.values(
+            'nickname'
+        ).annotate(
+            r_count=Count('movierequests_created__movie_title')
+        ).order_by('-r_count').all()
+    )
+    total_requests = await sync_to_async(
+        MovieRequestRepository.model.objects.count)()
+
+    # grouping requests of < 10 into "others"
+    top_request_counts, bottom_request_counts = partition(
+        lambda x: x['r_count'] > 20, request_counts)
+
+    combined_bottom_count = reduce(
+        lambda acc, next_val: acc + next_val['r_count'],
+        bottom_request_counts,
+        0)
+    combined_request_counts = top_request_counts + [{'nickname': 'Others', 'r_count': combined_bottom_count}]
+
+    labels = [f"{u['nickname']} ({u['r_count']})" for u in combined_request_counts]
+    sizes = [generate_size(u['r_count'], total_requests) for u in combined_request_counts]
+
+    pyplot.clf()
+    fig1, ax1 = pyplot.subplots()
+    ax1.pie(sizes, labels=labels, autopct='%1.1f%%',
+            shadow=True, startangle=90)
+    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+
+    fig1.savefig('tmp.png')
+
+    await ctx.send(file=File('tmp.png'))
+
+    os.remove('tmp.png')
 
 
 @bot.event
