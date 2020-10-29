@@ -21,6 +21,8 @@ psycopg2-binary = "*"
 django-pgcrypto-fields = "*"
 django-service-objects = "*"
 certifi = "*"
+beautifulsoup4 = "*"
+lxml = "*"
 
 [requires]
 python_version = "3.6"
