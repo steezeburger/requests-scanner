@@ -8,7 +8,7 @@ from discord.ext.commands import Context
 from django.db.models import Count
 from matplotlib import pyplot
 
-from bot.helpers import partition
+from bot.helpers import partition, generate_size
 from core.repositories.user_repository import UserRepository
 from movie_requests.repositories.movie_request_repository import MovieRequestRepository
 
@@ -65,10 +65,6 @@ async def stats(ctx: Context):
              brief='Pie!',
              help='A pie chart showing request count percentages.')
 async def statspie(ctx: Context):
-    def generate_size(count, total):
-        percentage = count / total * 100
-        return round(percentage, 2)
-
     request_counts = await sync_to_async(list)(
         UserRepository.model.objects.values(
             'nickname'
