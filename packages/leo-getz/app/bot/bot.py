@@ -21,7 +21,9 @@ async def get_or_create_user_from_author(author):
     return user
 
 
-@bot.command(pass_sontext=True)
+@bot.command(pass_sontext=True,
+             brief='Stats for the movie specified',
+             help='Send !moviestats Some Movie to see how many times the movie has been requested.')
 async def moviestats(ctx: Context, *args):
     movie_title = ' '.join(args)
     movie_requests = await sync_to_async(list)(MovieRequestRepository.model.objects.filter(
@@ -37,7 +39,9 @@ async def moviestats(ctx: Context, *args):
             f"{movie_title} has not been requested.")
 
 
-@bot.command(pass_sontext=True)
+@bot.command(pass_sontext=True,
+             brief='Your stats',
+             help='Send !stats to see stats about your movie requests.')
 async def stats(ctx: Context):
     author = ctx.message.author
 
