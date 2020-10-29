@@ -92,6 +92,8 @@ class UserAdmin(UserAdmin):
             'classes': ('wide',),
             'fields': (
                 'nickname',
+                'discord_id',
+                'discord_username',
                 'password1',
                 'password2',
                 'is_superuser',
@@ -102,6 +104,8 @@ class UserAdmin(UserAdmin):
 
     fieldsets = (
         (None, {'fields': ('nickname',
+                           'discord_id',
+                           'discord_username',
                            'password')}),
 
         ('Important', {'fields': ('is_active',
