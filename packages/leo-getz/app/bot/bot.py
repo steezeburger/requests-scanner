@@ -23,6 +23,7 @@ async def get_or_create_user_from_author(author):
 
 @bot.command(pass_sontext=True,
              brief='Stats for the movie specified',
+             usage='Name of Movie',
              help='Send !moviestats Some Movie to see how many times the movie has been requested.')
 async def moviestats(ctx: Context, *args):
     movie_title = ' '.join(args)
