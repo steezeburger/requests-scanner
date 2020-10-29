@@ -1,7 +1,7 @@
 from asgiref.sync import sync_to_async
 
 from common.repositories.base_repository import BaseRepository
-from movie_requests.models.movie_request import MovieRequest
+from movie_requests.models import MovieRequest
 
 
 class MovieRequestRepository(BaseRepository):
@@ -18,8 +18,14 @@ class MovieRequestRepository(BaseRepository):
     @classmethod
     @sync_to_async
     def create(cls, data: dict) -> 'MovieRequest':
-        note = cls.model.objects.create(**data)
-        return note
+        movie_request = cls.model.objects.create(**data)
+        return movie_request
+
+    @classmethod
+    def create_sync(cls, data: dict) -> 'MovieRequest':
+        movie_request = cls.model.objects.create(**data)
+        print(movie_request.created_at)
+        return movie_request
 
     @classmethod
     def delete(cls, *, pk=None, obj: 'MovieRequest' = None) -> 'MovieRequest':

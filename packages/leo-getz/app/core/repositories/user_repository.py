@@ -33,6 +33,24 @@ class UserRepository(BaseRepository):
         return user
 
     @classmethod
+    def get_or_create_sync(cls, *, data: dict):
+        if 'discord_id' not in data or 'discord_username' not in data:
+            raise ValidationError("Input must include `discord_id` or `discord_username`")
+
+        user = None
+        if 'discord_id' in data:
+            user = cls.get_by_discord_id(data['discord_id'])
+        if 'discord_username' in data:
+            user = cls.get_by_discord_username(data['discord_username'])
+
+        if not user:
+            if 'nickname' not in data:
+                data['nickname'] = data.get('discord_username') or data.get('discord_id')
+            user = cls.create(data)
+
+        return user
+
+    @classmethod
     def get_by_discord_id(cls, discord_id):
         try:
             user = cls.model.objects.get(discord_id=discord_id)
