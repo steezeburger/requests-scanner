@@ -3,6 +3,7 @@ from plexapi.myplex import MyPlexAccount
 from django.conf import settings
 from django.core.management import BaseCommand
 
+from movie_requests.models import MovieRequest
 from movie_requests.repositories.plex_movie_repository import PlexMovieRepository
 
 
@@ -18,9 +19,12 @@ class Command(BaseCommand):
 
         movies = plex.library.section('Movies')
 
-        # TODO - sort by addedAt and only fetch last day or two
         # TODO - schedule this job to run every night
-        for movie in movies.all(sort='titleSort'):
+        # FIXME - had to pick a relatively high number for container_size
+        #  as filtering with `addedAt__gt=` or `addedAt__startswith=` did not work
+        for movie in movies.all(sort='addedAt',
+                                container_start=0,
+                                container_size=100):
             movie_details = {
                 'plex_guid': movie.guid,
                 'title': movie.title,
@@ -37,4 +41,13 @@ class Command(BaseCommand):
             plex_movie.created_at = movie.addedAt
             plex_movie.save()
 
-            # TODO - find matching request if exists and update fulfilled status
+            # find matching request if exists and update fulfilled status
+            movie_requests = MovieRequest.objects.filter(
+                movie_title=plex_movie.title)
+
+            if movie_requests.exists():
+                print(f'found {movie_requests.count()} requests for {plex_movie.title}')
+
+                movie_requests.update(
+                    movie=plex_movie,
+                    fulfilled=True)
