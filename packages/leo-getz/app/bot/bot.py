@@ -28,6 +28,11 @@ async def get_or_create_user_from_author(author):
     return user
 
 
+@bot.event
+async def on_ready():
+    print(f'Connected to Discord!')
+
+
 @bot.command(pass_sontext=True,
              brief='Stats for the movie specified',
              usage='Name of Movie',
@@ -55,10 +60,13 @@ async def stats(ctx: Context):
 
     user = await get_or_create_user_from_author(author)
 
-    cnt = await sync_to_async(user.movierequests_created.count)()
+    request_cnt = await sync_to_async(user.movierequests_created.count)()
+    fulfilled_cnt = await sync_to_async(
+        user.movierequests_created.filter(fulfilled=True).count
+    )()
 
     await ctx.message.channel.send(
-        f"{author.display_name} has requested {str(cnt)} movies.")
+        f"{author.display_name} has requested {str(request_cnt)} movies.\n{fulfilled_cnt} have been fulfilled.")
 
 
 @bot.command(pass_context=True,
@@ -83,7 +91,7 @@ async def statspie(ctx: Context):
         lambda acc, next_val: acc + next_val['r_count'],
         bottom_request_counts,
         0)
-    combined_request_counts = top_request_counts + [{'nickname': 'Others', 'r_count': combined_bottom_count}]
+    combined_request_counts = top_request_counts + [{'nickname': '...', 'r_count': combined_bottom_count}]
 
     labels = [f"{u['nickname']} ({u['r_count']})" for u in combined_request_counts]
     sizes = [generate_size(u['r_count'], total_requests) for u in combined_request_counts]

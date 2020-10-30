@@ -36,3 +36,5 @@ class Command(BaseCommand):
 
             plex_movie.created_at = movie.addedAt
             plex_movie.save()
+
+            # TODO - find matching request if exists and update fulfilled status
