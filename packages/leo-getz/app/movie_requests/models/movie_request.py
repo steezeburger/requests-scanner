@@ -17,18 +17,25 @@ class MovieRequest(CreatedByMixin,
     movie_title = fields.CharPGPSymmetricKeyField(
         max_length=255,
         db_index=True,
-        help_text=_("The title of the movie."))
+        help_text=_('The title of the movie.'))
 
     movie_url = fields.CharPGPSymmetricKeyField(
         max_length=255,
         blank=True,
         null=True,
         db_index=True,
-        help_text=_("The URL for the movie."))
+        help_text=_('The URL for the movie.'))
 
     fulfilled = models.BooleanField(
         default=False,
-        help_text=_("True if this request is fulfilled."))
+        help_text=_('True if this request is fulfilled.'))
+
+    movie = models.ForeignKey(
+        'movie_requests.PlexMovie',
+        related_name='movie_requests',
+        on_delete=models.SET_NULL,
+        null=True,
+        help_text=_('The movie on the Plex server that fulfilled this request.'))
 
     class Meta:
         db_table = 'movie_requests'

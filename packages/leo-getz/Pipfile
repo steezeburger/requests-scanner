@@ -24,6 +24,7 @@ certifi = "*"
 beautifulsoup4 = "*"
 lxml = "*"
 matplotlib = "*"
+plexapi = "*"
 
 [requires]
 python_version = "3.6"

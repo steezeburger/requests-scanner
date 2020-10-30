@@ -135,3 +135,6 @@ DISCORD_TOKEN = os.environ['DISCORD_TOKEN']
 
 # pgcrypto
 PGCRYPTO_KEY = os.environ['PGCRYPTO_KEY']
+
+PLEX_USERNAME = os.environ.get('PLEX_USERNAME')
+PLEX_PASSWORD = os.environ.get('PLEX_PASSWORD')
