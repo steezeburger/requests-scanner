@@ -22,7 +22,7 @@ class Command(BaseCommand):
         # TODO - schedule this job to run every night
         # FIXME - had to pick a relatively high number for container_size
         #  as filtering with `addedAt__gt=` or `addedAt__startswith=` did not work
-        for movie in movies.all(sort='addedAt',
+        for movie in movies.all(sort='addedAt:desc',
                                 container_start=0,
                                 container_size=100):
             movie_details = {
