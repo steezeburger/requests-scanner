@@ -84,7 +84,7 @@ class Command(BaseCommand):
                             timestamp_str = timestamp_elem.text
                             timestamp_obj = datetime.datetime.strptime(timestamp_str, '%d-%b-%y %I:%M %p')
 
-                            user = UserRepository.get_or_create_sync(data=author_details)
+                            user = UserRepository.get_or_create(data=author_details)
 
                             movie_request_details = {
                                 'movie_title': movie_title_elem.text,
@@ -92,7 +92,7 @@ class Command(BaseCommand):
                                 'created_by': user,
                             }
 
-                            movie_request = MovieRequestRepository.create_sync(movie_request_details)
+                            movie_request = MovieRequestRepository.create(movie_request_details)
                             movie_request.created_at = timestamp_obj
                             movie_request.save()
 

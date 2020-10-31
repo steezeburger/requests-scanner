@@ -23,7 +23,7 @@ async def get_or_create_user_from_author(author):
         'discord_username': author.name,
     }
 
-    user = await UserRepository.get_or_create(data=user_details)
+    user = await UserRepository.get_or_create_async(data=user_details)
 
     return user
 
@@ -34,7 +34,7 @@ async def on_ready():
 
 
 @bot.command(pass_sontext=True,
-             brief='Stats for the movie specified',
+             brief='Stats for the specified movie.',
              usage='Name of Movie',
              help='Send !moviestats Some Movie to see how many times the movie has been requested.')
 async def moviestats(ctx: Context, *args):
@@ -130,7 +130,7 @@ async def on_message_edit(before, after):
         'movie_url': new_embed.url,
         'created_by': user,
     }
-    await MovieRequestRepository.create(form)
+    await MovieRequestRepository.create_async(form)
 
     # FIXME - will send a message when this is the only server running
     # await after.channel.send(

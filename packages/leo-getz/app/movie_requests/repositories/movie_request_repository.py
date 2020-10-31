@@ -16,16 +16,14 @@ class MovieRequestRepository(BaseRepository):
         return movie_requests
 
     @classmethod
-    @sync_to_async
     def create(cls, data: dict) -> 'MovieRequest':
         movie_request = cls.model.objects.create(**data)
         return movie_request
 
     @classmethod
-    def create_sync(cls, data: dict) -> 'MovieRequest':
-        movie_request = cls.model.objects.create(**data)
-        print(movie_request.created_at)
-        return movie_request
+    @sync_to_async
+    def create_async(cls, data: dict) -> 'MovieRequest':
+        return cls.create(data)
 
     @classmethod
     def delete(cls, *, pk=None, obj: 'MovieRequest' = None) -> 'MovieRequest':
