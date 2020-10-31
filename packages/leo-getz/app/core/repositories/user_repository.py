@@ -15,7 +15,7 @@ class UserRepository(BaseRepository):
 
     @classmethod
     def get_or_create(cls, *, data: dict):
-        if 'discord_id' not in data or 'discord_username' not in data:
+        if 'discord_id' not in data and 'discord_username' not in data:
             raise ValidationError("Input must include `discord_id` or `discord_username`")
 
         user = None

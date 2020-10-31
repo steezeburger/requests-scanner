@@ -41,3 +41,8 @@ class MovieRequest(CreatedByMixin,
         db_table = 'movie_requests'
         default_permissions = ()
         ordering = ('id',)
+
+    @property
+    def count_by_title(self):
+        return MovieRequest.objects.filter(
+            movie_title=self.movie_title).count()

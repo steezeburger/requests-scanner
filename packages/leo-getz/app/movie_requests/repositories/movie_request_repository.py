@@ -32,6 +32,16 @@ class MovieRequestRepository(BaseRepository):
         return movie_request
 
     @classmethod
+    def get_by_title(cls, title: str) -> 'MovieRequest':
+        return cls.model.objects.filter(
+            movie_title=title).first()
+
+    @classmethod
+    @sync_to_async
+    def get_by_title_async(cls, title):
+        return cls.get_by_title(title)
+
+    @classmethod
     def update(cls, *, pk=None, obj: 'MovieRequest' = None, data: dict) -> 'MovieRequest':
         movie_request = obj or cls.get(pk=pk)
 
