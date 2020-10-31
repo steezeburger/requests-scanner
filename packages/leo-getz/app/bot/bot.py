@@ -10,6 +10,7 @@ from matplotlib import pyplot
 
 from bot.helpers import partition, generate_size
 from core.repositories.user_repository import UserRepository
+from movie_requests.repositories import PlexMovieRepository
 from movie_requests.repositories.movie_request_repository import MovieRequestRepository
 
 bot = commands.Bot(command_prefix='!')
@@ -39,17 +40,33 @@ async def on_ready():
              help='Send !moviestats Some Movie to see how many times the movie has been requested.')
 async def moviestats(ctx: Context, *args):
     movie_title = ' '.join(args)
-    movie_requests = await sync_to_async(list)(MovieRequestRepository.model.objects.filter(
-        movie_title__iexact=movie_title).all())
+    if not movie_title:
+        await ctx.message.channel.send('You gotta pass in a movie name you dumb goof.')
+        return
 
-    cnt = len(movie_requests)
+    movie_request = await MovieRequestRepository.get_by_title_async(movie_title)
 
-    if cnt > 0:
-        await ctx.message.channel.send(
-            f"{movie_requests[0].movie_title} has been requested {str(cnt)} times.")
+    plex_movie = await PlexMovieRepository.get_by_title_async(movie_title)
+
+    # build messages
+    if not movie_request and not plex_movie:
+        message = f'{movie_title} has not been requested, and it is not on the Plex server...\n'
+        message += "probably because you haven't requested it."
+    elif not movie_request and plex_movie:
+        message = f'{plex_movie.title} has not been requested but I know what my guy likes, '
+        message += f'and I added it to the Plex server on {plex_movie.created_at}'
+    elif movie_request and not plex_movie:
+        cnt = await movie_request.count_by_title_async
+        message = f'{movie_request.movie_title} has been requested {str(cnt)} times.\n'
+        message += 'Unfortunately it does not appear to be on the Plex server. Go cry about it.'
+    elif movie_request and plex_movie:
+        cnt = await movie_request.count_by_title_async
+        message = f'{movie_request.movie_title} has been requested {str(cnt)} times '
+        message += f'and was added to the Plex server on {plex_movie.created_at}, because I love you'
     else:
-        await ctx.message.channel.send(
-            f"{movie_title} has not been requested.")
+        message = "What the fuck did you just say?"
+
+    await ctx.message.channel.send(message)
 
 
 @bot.command(pass_sontext=True,
@@ -91,16 +108,20 @@ async def statspie(ctx: Context):
         lambda acc, next_val: acc + next_val['r_count'],
         bottom_request_counts,
         0)
-    combined_request_counts = top_request_counts + [{'nickname': '...', 'r_count': combined_bottom_count}]
+    combined_request_counts = top_request_counts + \
+        [{'nickname': '...', 'r_count': combined_bottom_count}]
 
-    labels = [f"{u['nickname']} ({u['r_count']})" for u in combined_request_counts]
-    sizes = [generate_size(u['r_count'], total_requests) for u in combined_request_counts]
+    labels = [
+        f"{u['nickname']} ({u['r_count']})" for u in combined_request_counts]
+    sizes = [generate_size(u['r_count'], total_requests)
+             for u in combined_request_counts]
 
     pyplot.clf()
     fig1, ax1 = pyplot.subplots()
     ax1.pie(sizes, labels=labels, autopct='%1.1f%%',
             shadow=True, startangle=90)
-    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    # Equal aspect ratio ensures that pie is drawn as a circle.
+    ax1.axis('equal')
 
     fig1.savefig('tmp.png')
 

@@ -34,7 +34,7 @@ class MovieRequestRepository(BaseRepository):
     @classmethod
     def get_by_title(cls, title: str) -> 'MovieRequest':
         return cls.model.objects.filter(
-            movie_title=title).first()
+            movie_title__iexact=title).first()
 
     @classmethod
     @sync_to_async

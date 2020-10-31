@@ -1,3 +1,4 @@
+from asgiref.sync import sync_to_async
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from pgcrypto import fields
@@ -46,3 +47,8 @@ class MovieRequest(CreatedByMixin,
     def count_by_title(self):
         return MovieRequest.objects.filter(
             movie_title=self.movie_title).count()
+
+    @property
+    @sync_to_async
+    def count_by_title_async(self):
+        return self.count_by_title

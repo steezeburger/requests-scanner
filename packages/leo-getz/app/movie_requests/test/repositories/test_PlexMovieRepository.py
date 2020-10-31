@@ -35,3 +35,11 @@ class TestPlexMovieRepository(TestCase):
             data=movie_details)
 
         self.assertEqual(plex_movie.pk, obj_from_db.pk)
+
+    def test_should_get_plex_movie_by_title_iexact(self):
+        plex_movie = PlexMovieFactory(title='BANANA')
+
+        obj_from_db = PlexMovieRepository.get_by_title(
+            plex_movie.title.lower())
+
+        self.assertEqual(plex_movie.title, obj_from_db.title)
