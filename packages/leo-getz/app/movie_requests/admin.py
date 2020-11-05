@@ -1,10 +1,22 @@
+from django import forms
 from django.contrib import admin
 
 from .models import MovieRequest, PlexMovie
 
 
+class MovieRequestAdminForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['movie'].required = False
+
+    class Meta:
+        model = MovieRequest
+        fields = '__all__'
+
+
 @admin.register(MovieRequest)
 class MovieRequestAdmin(admin.ModelAdmin):
+    form = MovieRequestAdminForm
     list_display = (
         'id',
         'movie_title',
