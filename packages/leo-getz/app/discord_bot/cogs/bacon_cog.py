@@ -16,8 +16,8 @@ class BaconCog(commands.Cog):
         # munge input
         user_input = ' '.join(args)
         from_actor, to_actor = user_input.split('to ')
-        from_actor = from_actor.strip()
-        to_actor = to_actor.strip()
+        from_actor = from_actor.strip().title()
+        to_actor = to_actor.strip().title()
 
         movies = await sync_to_async(list)(PlexMovie.objects.all().values())
         df = pd.DataFrame(movies)
@@ -27,7 +27,7 @@ class BaconCog(commands.Cog):
 
         def add_movie_and_actors_to_graph(movie):
             graph.add_node(movie.title,
-                       type='movie',
+                           type='movie',
                        color='blue')
             for actor in movie.actors:
                 if actor not in added_actor:
@@ -46,6 +46,7 @@ class BaconCog(commands.Cog):
 
             # build message
             words_list = []
+            hops = 0
 
             for idx, entry in enumerate(path):
                 if idx == 0:
@@ -54,6 +55,7 @@ class BaconCog(commands.Cog):
                     words_list.append('was in')
                 elif idx % 2 != 0:
                     # a movie
+                    hops += 1
                     words_list.append(entry)
                     words_list.append('with')
                 elif idx % 2 == 0 and idx != len(path) - 1:
@@ -64,6 +66,8 @@ class BaconCog(commands.Cog):
                     # last actor
                     words_list.append(f'{entry}.')
 
-            await ctx.message.channel.send(' '.join(words_list))
+            message = f'{from_actor} and {to_actor} are connected by {hops} hops.\n' + \
+                      ' '.join(words_list)
+            await ctx.message.channel.send(message)
         except nx.NodeNotFound as exception:
             await ctx.message.channel.send(exception)
