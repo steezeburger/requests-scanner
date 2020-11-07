@@ -13,6 +13,8 @@ from core.repositories.user_repository import UserRepository
 from movie_requests.repositories import PlexMovieRepository
 from movie_requests.repositories.movie_request_repository import MovieRequestRepository
 
+MOVIE_DB_URL = 'themoviedb.org/movie'
+
 bot = commands.Bot(command_prefix='!')
 
 
@@ -131,11 +133,29 @@ async def statspie(ctx: Context):
 
 
 @bot.event
+async def on_message(message):
+    is_request = MOVIE_DB_URL in message.content
+    has_embed = len(message.embeds) > 0
+
+    if is_request and has_embed:
+        user = await get_or_create_user_from_author(message.author)
+        embed = message.embeds[0]
+        form = {
+            'movie_title': embed.title,
+            'movie_url': embed.url,
+            'created_by': user,
+        }
+        await MovieRequestRepository.create_async(form)
+
+@bot.event
 async def on_message_edit(before, after):
+    if len(before.embeds) == 0:
+        return
+
     old_url = before.embeds[0].url
     url = after.embeds[0].url
 
-    was_updated = not old_url and url and 'themoviedb.org/movie' in url
+    was_updated = not old_url and url and MOVIE_DB_URL in url
     if not was_updated:
         return
 

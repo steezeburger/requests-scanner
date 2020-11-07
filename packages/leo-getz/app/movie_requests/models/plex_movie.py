@@ -58,3 +58,6 @@ class PlexMovie(SoftDeleteTimestampMixin,
         db_table = 'plex_movies'
         default_permissions = ()
         ordering = ('id',)
+
+    def __str__(self):
+        return f'{self.title} ({self.year})'
