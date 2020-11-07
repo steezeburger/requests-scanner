@@ -11,13 +11,15 @@ class BaconCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(brief='Shows the number of hops connecting two actors. Names are case sensitive.',
+                      usage='John Goodman to Chevy Chase',
+                      help='Send !bacon John Goodman to Chevy Chase to see how many hops there are between actors. Names are case sensitive.')
     async def bacon(self, ctx: 'Context', *args):
         # munge input
         user_input = ' '.join(args)
         from_actor, to_actor = user_input.split('to ')
-        from_actor = from_actor.strip().title()
-        to_actor = to_actor.strip().title()
+        from_actor = from_actor.strip()
+        to_actor = to_actor.strip()
 
         movies = await sync_to_async(list)(PlexMovie.objects.all().values())
         df = pd.DataFrame(movies)
