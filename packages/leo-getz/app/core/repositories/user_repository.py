@@ -32,6 +32,20 @@ class UserRepository(BaseRepository):
         return user
 
     @classmethod
+    async def get_or_create_from_author_async(cls, author):
+        author_id = str(author.id)
+
+        user_details = {
+            'discord_id': author_id,
+            'discord_username': author.name,
+        }
+
+        user = await cls.get_or_create_async(
+            data=user_details)
+
+        return user
+
+    @classmethod
     @sync_to_async
     def get_or_create_async(cls, *, data: dict):
         return cls.get_or_create(data=data)
