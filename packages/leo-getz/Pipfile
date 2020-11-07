@@ -25,6 +25,8 @@ beautifulsoup4 = "*"
 lxml = "*"
 matplotlib = "*"
 plexapi = "*"
+networkx = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.6"

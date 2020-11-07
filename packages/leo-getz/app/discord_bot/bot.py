@@ -1,12 +1,14 @@
 from discord.ext import commands
 
 from core.repositories.user_repository import UserRepository
-from discord_bot.cogs import StatsCog
+from discord_bot.cogs import StatsCog, BaconCog
 from movie_requests.repositories import MovieRequestRepository, PlexMovieRepository
 
 MOVIE_DB_URL = 'themoviedb.org/movie'
 
 bot = commands.Bot(command_prefix='!')
+
+bot.add_cog(BaconCog(bot))
 
 bot.add_cog(StatsCog(bot, (UserRepository,
                            MovieRequestRepository,
