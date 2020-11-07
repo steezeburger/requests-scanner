@@ -2,7 +2,7 @@ import os
 
 from django.core.management import BaseCommand
 
-from bot.bot import bot
+from discord_bot.bot import bot
 
 
 class Command(BaseCommand):

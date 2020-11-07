@@ -8,7 +8,7 @@ from discord.ext.commands import Context
 from django.db.models import Count
 from matplotlib import pyplot
 
-from bot.helpers import partition, generate_size
+from discord_bot.helpers import partition, generate_size
 from core.repositories.user_repository import UserRepository
 from movie_requests.repositories import PlexMovieRepository
 from movie_requests.repositories.movie_request_repository import MovieRequestRepository
