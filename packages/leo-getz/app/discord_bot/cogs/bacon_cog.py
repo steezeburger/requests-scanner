@@ -71,5 +71,7 @@ class BaconCog(commands.Cog):
             message = f'{from_actor} and {to_actor} are connected by {hops} hops.\n' + \
                       ' '.join(words_list)
             await ctx.message.channel.send(message)
+        except nx.NetworkXNoPath as exception:
+            await ctx.message.channel.send(exception)
         except nx.NodeNotFound as exception:
             await ctx.message.channel.send(exception)
