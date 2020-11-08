@@ -21,7 +21,7 @@ class UserRepository(BaseRepository):
         user = None
         if 'discord_id' in data:
             user = cls.get_by_discord_id(data['discord_id'])
-        if 'discord_username' in data:
+        if not user and 'discord_username' in data:
             user = cls.get_by_discord_username(data['discord_username'])
 
         if not user:
