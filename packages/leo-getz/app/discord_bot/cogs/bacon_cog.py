@@ -49,7 +49,8 @@ class BaconCog(commands.Cog):
         added_writers = []
 
         def add_movie_and_actors_to_graph(movie):
-            movie_title = f"{movie.title.lower()} ({int(movie.year)})"
+            year = f"{int(movie.year)}" if movie.year else None
+            movie_title = f"{movie.title.lower()} {year}"
             graph.add_node(movie_title,
                            type='movie',
                            color='red')
