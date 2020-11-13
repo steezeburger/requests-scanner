@@ -49,7 +49,7 @@ class BaconCog(commands.Cog):
         added_writers = []
 
         def add_movie_and_actors_to_graph(movie):
-            graph.add_node(movie.title.lower(),
+            graph.add_node(f"{movie.title.lower()} ({movie.year})",
                            type='movie',
                            color='red')
 
@@ -111,7 +111,7 @@ class BaconCog(commands.Cog):
                 elif idx % 2 != 0:
                     # a movie
                     hops += 1
-                    words_list.append(entry.title())
+                    words_list.append(entry)
                     words_list.append('with')
                 elif idx % 2 == 0 and idx != len(path) - 1:
                     # an actor
