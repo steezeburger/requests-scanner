@@ -49,7 +49,8 @@ class BaconCog(commands.Cog):
         added_writers = []
 
         def add_movie_and_actors_to_graph(movie):
-            graph.add_node(f"{movie.title.lower()} ({movie.year})",
+            movie_title = f"{movie.title.lower()} ({movie.year})"
+            graph.add_node(movie_title,
                            type='movie',
                            color='red')
 
@@ -60,7 +61,7 @@ class BaconCog(commands.Cog):
                                    type='actor',
                                    color='blue' if actor == from_actor else 'green')
                     added_actors.append(actor)
-                graph.add_edge(movie.title, actor)
+                graph.add_edge(movie_title, actor)
 
             if with_directors:
                 for director in movie.directors:
@@ -70,7 +71,7 @@ class BaconCog(commands.Cog):
                                        type='directors',
                                        color='yellow' if director == from_actor else 'green')
                         added_directors.append(director)
-                    graph.add_edge(movie.title, director)
+                    graph.add_edge(movie_title, director)
 
             if with_producers:
                 for producer in movie.producers:
@@ -80,7 +81,7 @@ class BaconCog(commands.Cog):
                                        type='producers',
                                        color='purple' if producer == from_actor else 'green')
                         added_producers.append(producer)
-                    graph.add_edge(movie.title, producer)
+                    graph.add_edge(movie_title, producer)
 
             if with_writers:
                 for writer in movie.writers:
@@ -90,7 +91,7 @@ class BaconCog(commands.Cog):
                                        type='writers',
                                        color='red' if writer == from_actor else 'green')
                         added_writers.append(writer)
-                    graph.add_edge(movie.title, writer)
+                    graph.add_edge(movie_title, writer)
 
         _ = df.apply(lambda m: add_movie_and_actors_to_graph(m), axis=1)
 
