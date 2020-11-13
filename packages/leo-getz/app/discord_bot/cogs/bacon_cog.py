@@ -15,29 +15,82 @@ class BaconCog(commands.Cog):
                       usage='John Goodman to Chevy Chase',
                       help='Send !bacon John Goodman to Chevy Chase to see how many hops there are between actors. Names are case sensitive.')
     async def bacon(self, ctx: 'Context', *args):
+
+        # calculate flags
+        flags = [f for f in args if f.startswith('-')]
+        with_directors = False
+        with_producers = False
+        with_writers = False
+
+        if '-d' in flags:
+            with_directors = True
+
+        if '-p' in flags:
+            with_producers = True
+
+        if '-w' in flags:
+            with_writers = True
+
+        args = [f for f in args if not f.startswith('-')]
+
         # munge input
         user_input = ' '.join(args)
         from_actor, to_actor = user_input.split('to ')
-        from_actor = from_actor.strip()
-        to_actor = to_actor.strip()
+        from_actor = from_actor.strip().lower()
+        to_actor = to_actor.strip().lower()
 
         movies = await sync_to_async(list)(PlexMovie.objects.all().values())
         df = pd.DataFrame(movies)
 
         graph = nx.Graph()
-        added_actor = []
+        added_actors = []
+        added_directors = []
+        added_producers = []
+        added_writers = []
 
         def add_movie_and_actors_to_graph(movie):
-            graph.add_node(movie.title,
+            graph.add_node(movie.title.lower(),
                            type='movie',
-                       color='blue')
+                           color='red')
+
             for actor in movie.actors:
-                if actor not in added_actor:
+                if actor not in added_actors:
+                    actor = actor.lower()
                     graph.add_node(actor,
-                               type='actor',
-                               color='red' if actor == from_actor else 'green')
-                    added_actor.append(actor)
+                                   type='actor',
+                                   color='blue' if actor == from_actor else 'green')
+                    added_actors.append(actor)
                 graph.add_edge(movie.title, actor)
+
+            if with_directors:
+                for director in movie.directors:
+                    if director not in added_directors:
+                        director = director.lower()
+                        graph.add_node(director,
+                                       type='directors',
+                                       color='yellow' if director == from_actor else 'green')
+                        added_directors.append(director)
+                    graph.add_edge(movie.title, director)
+
+            if with_producers:
+                for producer in movie.producers:
+                    if producer not in added_producers:
+                        producer = producer.lower()
+                        graph.add_node(producer,
+                                       type='producers',
+                                       color='purple' if producer == from_actor else 'green')
+                        added_producers.append(producer)
+                    graph.add_edge(movie.title, producer)
+
+            if with_writers:
+                for writer in movie.writers:
+                    if writer not in added_writers:
+                        writer = writer.lower()
+                        graph.add_node(writer,
+                                       type='writers',
+                                       color='red' if writer == from_actor else 'green')
+                        added_writers.append(writer)
+                    graph.add_edge(movie.title, writer)
 
         _ = df.apply(lambda m: add_movie_and_actors_to_graph(m), axis=1)
 
@@ -53,20 +106,20 @@ class BaconCog(commands.Cog):
             for idx, entry in enumerate(path):
                 if idx == 0:
                     # from actor
-                    words_list.append(entry)
-                    words_list.append('was in')
+                    words_list.append(entry.title())
+                    words_list.append('worked on')
                 elif idx % 2 != 0:
                     # a movie
                     hops += 1
-                    words_list.append(entry)
+                    words_list.append(entry.title())
                     words_list.append('with')
                 elif idx % 2 == 0 and idx != len(path) - 1:
                     # an actor
-                    words_list.append(entry)
-                    words_list.append('who was in')
+                    words_list.append(entry.title())
+                    words_list.append('who worked on')
                 elif idx == len(path) - 1:
                     # last actor
-                    words_list.append(f'{entry}.')
+                    words_list.append(f'{entry.title()}.')
 
             message = f'{from_actor} and {to_actor} are connected by {hops} hops.\n' + \
                       ' '.join(words_list)
