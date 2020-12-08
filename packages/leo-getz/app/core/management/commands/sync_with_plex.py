@@ -15,7 +15,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         account = MyPlexAccount(settings.PLEX_USERNAME,
                                 settings.PLEX_PASSWORD)
-        plex = account.resource('lw817-iceburgs').connect()
+        plex = account.resource('lw88-iceburgs').connect()
 
         movies = plex.library.section('Movies')
 
