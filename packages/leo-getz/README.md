@@ -2,20 +2,16 @@ Leo Getz is the Discord bot server.
 
 Setup instructions:
 
-* clone repo, `cd` into `requests-scanner/`, and checkout "feature/django" branch
+* clone repo, `cd` into `requests-scanner/packages/leo-getz`
 
-  `git checkout feature/django`
-
-* copy env.sample to .env and get the following values from a buddy:
+* copy `env.sample` to `.env` and get the following values from a buddy:
     * DJANGO_SECRET_KEY
     * PGCRYPTO_SECRET_KEY
     * DISCORD_TOKEN
     * PLEX_USERNAME
     * PLEX_PASSWORD
 
-* open terminal and `cd` to `/packages/leo-getz`
-
-* create docker volume
+* create docker volume. this will hold our postgres database data.
 
   `docker volume create --name=leo_getz_postgres`
 
@@ -23,7 +19,7 @@ Setup instructions:
 
   `docker-compose build bot`
 
-* migrate dev database
+* migrate dev database to apply any unapplied migrations. there will be several the first time.
 
   `./bin/dcp-django-admin migrate`
 
@@ -41,4 +37,6 @@ Setup instructions:
 
   you can now access the admin page at `0.0.0.0/8053` and login with `admin` and `password`
 
-* start the Discord bot `$ ./bin/dcp-django-admin start_discord_bot`
+* start the Discord bot via a Django management command
+
+  `$ ./bin/dcp-django-admin start_discord_bot`
