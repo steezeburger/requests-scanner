@@ -1,0 +1,6 @@
+.idea
+packages/leo-getz/app/core/management/commands/data/requests_history.html
+packages/leo-getz/app/core/fixtures/historical_requests.json
+packages/leo-getz/app/core/fixtures/all_requests.json
+packages/leo-getz/app/core/fixtures/prod_backup.json
+packages/leo-getz/app/core/fixtures/prod_backup_2020_10_30.json

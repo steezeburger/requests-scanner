@@ -1,0 +1,3 @@
+#! /bin/bash
+
+docker-compose run --rm -w /code/app bot /code/app/manage.py dumpdata --natural-primary --natural-foreign --exclude=admin.logentry --exclude=sessions.session --indent 4
