@@ -8,10 +8,10 @@ Setup instructions:
 
 * copy env.sample to .env and get the following values from a buddy:
     * DJANGO_SECRET_KEY
-    * GIST_FILENAME
-    * GIST_TOKEN
-    * GIST_ID
-    * BOT_TOKEN
+    * PGCRYPTO_SECRET_KEY
+    * DISCORD_TOKEN
+    * PLEX_USERNAME
+    * PLEX_PASSWORD
 
 * open terminal and `cd` to `/packages/leo-getz`
 

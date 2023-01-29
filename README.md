@@ -6,4 +6,3 @@ A Discord bot + Django application for managing torrent requests.
 
 * `$ cd packages/leo-getz/`
 * see leo-getz [README.md](packages/leo-getz/README.md)
-
