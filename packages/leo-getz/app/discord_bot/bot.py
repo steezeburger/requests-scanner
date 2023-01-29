@@ -1,22 +1,23 @@
-from discord.ext import commands
-
+import discord as discord
 from core.repositories.user_repository import UserRepository
+from discord.ext import commands
 from discord_bot.cogs import StatsCog, BaconCog
 from movie_requests.repositories import MovieRequestRepository, PlexMovieRepository
 
 MOVIE_DB_URL = 'themoviedb.org/movie'
 
-bot = commands.Bot(command_prefix='!')
-
-bot.add_cog(BaconCog(bot))
-
-bot.add_cog(StatsCog(bot, (UserRepository,
-                           MovieRequestRepository,
-                           PlexMovieRepository)))
+intents = discord.Intents.default()
+intents.message_content = True
+bot = commands.Bot(command_prefix='!', intents=intents)
 
 
 @bot.event
 async def on_ready():
+    await bot.add_cog(BaconCog(bot))
+
+    await bot.add_cog(StatsCog(bot, (UserRepository,
+                                     MovieRequestRepository,
+                                     PlexMovieRepository)))
     print(f'Connected to Discord!')
 
 
