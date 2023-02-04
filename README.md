@@ -1,6 +1,6 @@
 # requests-scanner
 
-A theoretical Discord bot + Django application for managing torrent requests, hypothetically. For research.
+A Discord bot + Django application for managing movie requests. Integrates with Plex. Easy to integrate with a seedbox if you want to manage movie download requests.
 
 ### How to
 
