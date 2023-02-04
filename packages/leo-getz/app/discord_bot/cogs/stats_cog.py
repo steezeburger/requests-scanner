@@ -87,6 +87,11 @@ class StatsCog(commands.Cog):
         total_requests = await sync_to_async(
             self.movie_request_repository.model.objects.count)()
 
+        if total_requests == 0:
+            await ctx.message.channel.send("Sorry, I cannot generate a pie chart. There are no requests!\r\n"
+                                           "DO YOU THINK I CAN DIVIDE BY ZERO?! FFS")
+            return
+
         # grouping requests of < 10 into "others"
         top_request_counts, bottom_request_counts = partition(
             lambda x: x['r_count'] > 20, request_counts)
