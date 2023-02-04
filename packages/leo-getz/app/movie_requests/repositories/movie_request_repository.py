@@ -38,8 +38,18 @@ class MovieRequestRepository(BaseRepository):
 
     @classmethod
     @sync_to_async
-    def get_by_title_async(cls, title):
+    def get_by_title_async(cls, title: str):
         return cls.get_by_title(title)
+
+    @classmethod
+    def get_by_tmdb_id(cls, tmdb_id: int) -> 'MovieRequest':
+        return cls.model.objects.filter(
+            tmdb_id=tmdb_id).first()
+
+    @classmethod
+    @sync_to_async
+    def get_by_tmdb_id_async(cls, tmdb_id: int):
+        return cls.get_by_tmdb_id(tmdb_id)
 
     @classmethod
     def update(cls, *, pk=None, obj: 'MovieRequest' = None, data: dict) -> 'MovieRequest':

@@ -1,7 +1,10 @@
+import re
+
 import discord as discord
 from core.repositories.user_repository import UserRepository
 from discord.ext import commands
 from discord_bot.cogs import StatsCog, BaconCog
+from discord_bot.helpers import get_random_affirm
 from movie_requests.repositories import MovieRequestRepository, PlexMovieRepository
 
 MOVIE_DB_URL = 'themoviedb.org/movie'
@@ -23,49 +26,45 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
+    """
+    Check message for url from themoviedb.org and create a MovieRequest if necessary.
+    """
+
     is_request = MOVIE_DB_URL in message.content
     has_embed = len(message.embeds) > 0
 
+    if is_request and not has_embed:
+        # NOTE - because has_embed checks for an embed, there is a possibility that the embed was not
+        await message.channel.send("It looks like you're requesting a movie.\r\n"
+                                   "I fucked up though, so can you please try that again?")
+        return
+
     if is_request and has_embed:
-        user = await UserRepository.get_or_create_from_author_async(
-            message.author)
+        user = await UserRepository.get_or_create_from_author_async(message.author)
         embed = message.embeds[0]
-        form = {
-            'movie_title': embed.title,
-            'movie_url': embed.url,
+        title = embed.title
+        url = embed.url
+
+        # get the tmdb_id from the url and check if a request already exists
+        tmdb_id = None
+        match = re.search(r'themoviedb\.org\/movie\/(\d*)-?(.*)', url)
+        if match:
+            tmdb_id = match.group(1)
+            existing_request = await MovieRequestRepository.get_by_tmdb_id_async(tmdb_id)
+            if existing_request and existing_request.fulfilled:
+                await message.channel.send(f"This request has already been fulfilled.")
+                return
+            if existing_request:
+                await message.channel.send(f"This movie has already been requested.\r\n"
+                                           f"Reach out to the server administrator if you think there is an issue.")
+                return
+
+        await MovieRequestRepository.create_async({
+            'movie_title': title,
+            'movie_url': url,
+            'tmdb_id': tmdb_id,
             'created_by': user,
-        }
-        await MovieRequestRepository.create_async(form)
+        })
+        await message.channel.send(get_random_affirm(title))
 
     await bot.process_commands(message)
-
-
-@bot.event
-async def on_message_edit(before, after):
-    if len(before.embeds) == 0:
-        return
-
-    old_url = before.embeds[0].url
-    url = after.embeds[0].url
-
-    was_updated = not old_url and url and MOVIE_DB_URL in url
-    if not was_updated:
-        return
-
-    # have to get this to determine who requested the movie
-    prev_message_list = await after.channel.history(limit=2).flatten()
-    prev_message = prev_message_list[1]
-    author = prev_message.author
-
-    user = await UserRepository.get_or_create_from_author_async(author)
-    new_embed = after.embeds[0]
-    form = {
-        'movie_title': new_embed.title,
-        'movie_url': new_embed.url,
-        'created_by': user,
-    }
-    await MovieRequestRepository.create_async(form)
-
-    # FIXME - will send a message when this is the only server running
-    # await after.channel.send(
-    #     f"{new_embed.title} will be coming right up...")

@@ -19,10 +19,15 @@ class MovieRequestAdmin(admin.ModelAdmin):
     form = MovieRequestAdminForm
     list_display = (
         'id',
+        'is_active',
         'movie_title',
         'fulfilled',
         'created_at',
         'created_by',
+    )
+    list_display_links = (
+        'id',
+        'movie_title',
     )
     list_filter = (
         'created_by',
@@ -37,9 +42,15 @@ class MovieRequestAdmin(admin.ModelAdmin):
 @admin.register(PlexMovie)
 class PlexMovieAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
+        'is_active',
         'title',
         'year',
+        'plex_guid',
         'created_at',
+    )
+    list_display_links = (
+        'title',
     )
     list_filter = (
         'created_at',

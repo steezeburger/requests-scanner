@@ -27,6 +27,9 @@ class MovieRequest(CreatedByMixin,
         db_index=True,
         help_text=_('The URL for the movie.'))
 
+    tmdb_id = models.IntegerField(
+        help_text=_('The ID of the movie from themoviedb.org. This is the part that comes after the slash.'))
+
     fulfilled = models.BooleanField(
         default=False,
         help_text=_('True if this request is fulfilled.'))
@@ -41,6 +44,7 @@ class MovieRequest(CreatedByMixin,
     class Meta:
         db_table = 'movie_requests'
         default_permissions = ()
+        unique_together = ('tmdb_id', 'fulfilled')
         ordering = ('id',)
 
     @property
