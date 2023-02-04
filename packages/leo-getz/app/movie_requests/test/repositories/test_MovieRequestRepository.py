@@ -14,6 +14,7 @@ class TestMovieRequestRepository(TestCase):
         details = {
             'movie_title': 'The Title of the Movie',
             'movie_url': 'http://www.someurl.com',
+            'tmdb_id': 603,
             'fulfilled': False,
             'created_by': self.user,
         }
@@ -28,11 +29,13 @@ class TestMovieRequestRepository(TestCase):
         movie_request = MovieRequestFactory(
             movie_title='banana',
             movie_url='www.google.com',
+            tmdb_id=603,
             fulfilled=False,
             created_by=self.user)
         movie_request_2 = MovieRequestFactory(
             movie_title='banana',
             movie_url='www.google.com',
+            tmdb_id=604,
             fulfilled=False,
             created_by=self.user)
 

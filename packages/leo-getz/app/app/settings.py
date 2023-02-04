@@ -154,3 +154,5 @@ PGCRYPTO_KEY = os.environ['PGCRYPTO_KEY']
 PLEX_USERNAME = os.environ.get('PLEX_USERNAME')
 PLEX_PASSWORD = os.environ.get('PLEX_PASSWORD')
 PLEX_RESOURCE_NAME = os.environ.get('PLEX_RESOURCE_NAME')
+
+TMDB_TOKEN_V3 = os.environ.get('TMDB_TOKEN_V3')

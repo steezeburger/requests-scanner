@@ -12,6 +12,9 @@ pylint-django = "*"
 pytest-cov = "*"
 pytest-django = "*"
 pytest-xdist = "*"
+dpytest = "*"
+pytest-asyncio = "*"
+pytest-mock = "*"
 
 [packages]
 django = "*"
