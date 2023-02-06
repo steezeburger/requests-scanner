@@ -13,7 +13,6 @@ from movie_requests.repositories import MovieRequestRepository, PlexMovieReposit
 class Misc(Cog):
     @command()
     async def ping(self, ctx):
-        print('WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW hat the absolute fuck')
         await ctx.send("Pong !")
 
     @command()
@@ -46,14 +45,16 @@ async def test_ping(bot):
     assert dpytest.verify().message().content("Pong !")
 
 
-# @pytest.mark.asyncio
-# async def test_request_movie(bot):
-#     await dpytest.message("https://themoviedb.org/movie/603")
-#     assert dpytest.verify().message().contains().content(
-#         "It looks like you're requesting a movie.")
+@pytest.mark.asyncio
+@pytest.mark.integration
+async def test_request_movie(bot):
+    await dpytest.message("https://themoviedb.org/movie/603")
+    assert dpytest.verify().message().content(
+        "It looks like you're requesting a movie.\r\n"
+        "I fucked up though, so can you please try that again?")
 
 @pytest.mark.asyncio
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 async def test_stats_me(bot, mocker):
     await dpytest.message("!statsme")
     assert dpytest.verify().message().content(
