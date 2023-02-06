@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from plexapi.myplex import MyPlexAccount
 
 from django.conf import settings
@@ -25,6 +27,8 @@ class Command(BaseCommand):
         for movie in movies.all(sort='addedAt:desc',
                                 container_start=0,
                                 container_size=100):
+
+            tmdb_id = int(movie.guids[1].id.split('//')[1])
             movie_details = {
                 'plex_guid': movie.guid,
                 'title': movie.title,
@@ -38,12 +42,12 @@ class Command(BaseCommand):
             }
             plex_movie = PlexMovieRepository.get_or_create(movie_details)
 
-            plex_movie.created_at = movie.addedAt
+            plex_movie.created_at = movie.addedAt.replace(tzinfo=timezone.utc)
             plex_movie.save()
 
             # find matching request if exists and update fulfilled status
             movie_requests = MovieRequest.objects.filter(
-                movie_title=plex_movie.title)
+                tmdb_id=tmdb_id)
 
             if movie_requests.exists():
                 print(f'found {movie_requests.count()} requests for {plex_movie.title}')

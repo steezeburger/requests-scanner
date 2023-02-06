@@ -31,6 +31,7 @@ plexapi = "*"
 networkx = "*"
 pandas = "*"
 tmdbsimple = "*"
+stringcase = "*"
 
 [requires]
 python_version = "3.10"

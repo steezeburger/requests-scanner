@@ -1,4 +1,7 @@
 import random
+import stringcase
+
+from services.tmdb import TMDB
 
 
 def partition(pred, iterable):
@@ -38,3 +41,21 @@ def get_random_affirm(title: str) -> str:
 
     message = random.choice(messages)
     return message
+
+def get_radarr_request_from_tmdb_info(tmdb_info: dict) -> dict:
+    """
+    Converts a dictionary from a tmdb response into a dictionary that can
+    be sent to Radarr's API
+    """
+
+    tmdb_id = tmdb_info.get('id')
+    title = tmdb_info.get('title')
+    title_slug = f'{stringcase.snakecase(title)}-{tmdb_id}'
+    full_poster_path = TMDB.get_poster_full_path(tmdb_info.get('poster_path'))
+
+    return {
+        'tmdb_id': tmdb_id,
+        'title': title,
+        'title_slug': title_slug,
+        'full_poster_path': full_poster_path
+    }
