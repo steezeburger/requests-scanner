@@ -1,12 +1,14 @@
-from datetime import datetime, timezone
-
-from plexapi.myplex import MyPlexAccount
+import logging
+from datetime import timezone
 
 from django.conf import settings
 from django.core.management import BaseCommand
+from plexapi.myplex import MyPlexAccount
 
 from movie_requests.models import MovieRequest
 from movie_requests.repositories.plex_movie_repository import PlexMovieRepository
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -50,7 +52,7 @@ class Command(BaseCommand):
                 tmdb_id=tmdb_id)
 
             if movie_requests.exists():
-                print(f'found {movie_requests.count()} requests for {plex_movie.title}')
+                logger.info(f'found {movie_requests.count()} requests for {plex_movie.title}')
 
                 movie_requests.update(
                     movie=plex_movie,

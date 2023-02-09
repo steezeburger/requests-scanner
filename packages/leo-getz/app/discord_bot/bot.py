@@ -1,3 +1,4 @@
+import logging
 import re
 
 import discord as discord
@@ -10,6 +11,8 @@ from movie_requests.repositories import MovieRequestRepository, PlexMovieReposit
 from services.radarr import Radarr
 from services.tmdb import TMDB
 
+logger = logging.getLogger(__name__)
+
 MOVIE_DB_URL = 'https://themoviedb.org/movie'
 
 intents = discord.Intents.default()
@@ -18,17 +21,17 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 
 @bot.event
-async def on_ready():
+async def on_ready() -> None:
     await bot.add_cog(BaconCog(bot))
 
     await bot.add_cog(StatsCog(bot, (UserRepository,
                                      MovieRequestRepository,
                                      PlexMovieRepository)))
-    print(f'Connected to Discord!')
+    logger.info('Connected to Discord!')
 
 
 @bot.event
-async def on_message(message):
+async def on_message(message) -> None:
     """
     Check message for url from themoviedb.org and create a MovieRequest if necessary.
     """
@@ -40,7 +43,7 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
-async def handle_request_message(message):
+async def handle_request_message(message) -> None:
     user = await UserRepository.get_or_create_from_author_async(message.author)
 
     # get the tmdb_id from the url and check if a request already exists
@@ -49,9 +52,8 @@ async def handle_request_message(message):
     if not match:
         return
 
-    tmdb_id = None
-    tmdb_id = match.group(1)
-    tmdb_id = int(tmdb_id)
+    # ensure we haven't already requested this movie
+    tmdb_id = int(match.group(1))
     existing_request = await MovieRequestRepository.get_by_tmdb_id_async(tmdb_id)
     if existing_request and existing_request.fulfilled:
         await message.channel.send(f"This request has already been fulfilled.")
@@ -63,17 +65,19 @@ async def handle_request_message(message):
 
     # get movie info from TMDB, so we can create a request for radarr
     movie_info = TMDB.get_movie_by_id(tmdb_id)
-
     if movie_info.get('belongs_to_collection'):
         await message.channel.send(f"This movie belongs to a collection, and I don't know how to handle that yet.\r\n"
                                    f"Try requesting just the individual movie.")
         return
 
-    radarr_request = get_radarr_request_from_tmdb_info(movie_info)
-    print(radarr_request)
-
-    # creates the movie in Radarr
-    Radarr.create_movie(radarr_request)
+    try:
+        # creates the movie in Radarr
+        radarr_request = get_radarr_request_from_tmdb_info(movie_info)
+        Radarr.create_movie(radarr_request)
+    except Exception as e:
+        logger.exception(str(e))
+        await message.channel.send('Something went wrong. I gave up. Please check the logs.')
+        return
 
     # creates the request locally
     await MovieRequestRepository.create_async({

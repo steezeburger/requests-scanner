@@ -30,6 +30,20 @@ try:
 except KeyError:
     ALLOWED_HOSTS = []
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}
+
 # auth
 AUTH_USER_MODEL = 'core.User'
 # authentication for django admin
@@ -164,4 +178,3 @@ SEEDBOX_UN = os.environ.get('SEEDBOX_UN')
 SEEDBOX_PW = os.environ.get('SEEDBOX_PW')
 
 TMDB_TOKEN_V3 = os.environ.get('TMDB_TOKEN_V3')
-
